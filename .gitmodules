@@ -1,0 +1,3 @@
+[submodule "src/TFG_ComHardware"]
+	path = src/TFG_ComHardware
+	url = https://github.com/lsrigueira/TFG_ComHardware.git
