@@ -1,5 +1,5 @@
 NSAMPLES=10#The number of samples we receive from each axis of each json
-PATH="JsonsCollidos/"#Where are all the jsons?
+PATH="TFG_ComHardware/JsonsCollidos/"#Where are all the jsons?
 NJSONS=9#remember the name needs to be the next in the sequence(30,31,34,35,38,39,42....)
 #GOLPES=["Gancho","Recto","Crochet","Mixto","Patada circular","Patada giratoria","Patada voladora","Patada gancho"]#The name needs to have 3 characters minimum
 #DIRECCIONS=["Ascendente","Frontal","Lateral Dereito","Lateral Esquerdo","Descendente"]
