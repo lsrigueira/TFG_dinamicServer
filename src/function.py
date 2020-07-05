@@ -16,7 +16,7 @@ from sklearn.svm import LinearSVC
 from warnings import simplefilter
 from sklearn.svm import SVC
 from sklearn.model_selection import cross_validate
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import SelectFromModel
 from sklearn.ensemble import RandomForestClassifier
@@ -556,7 +556,7 @@ def calibrar(usuario,sesion,hitname,verresult):
     if int(resposta) is 1:
         #len(values)=60 porque temos 60 golpes almacenados  
         #We will get now a list of randomindex to prove each tolerance(20% of samples)  
-        linear = LinearSVC(max_iter=constant.MAXITER)
+        linear = LinearSVC(penalty="l2",max_iter=constant.MAXITER)
         clf1 = SelectFromModel(linear.fit(values, labels), prefit=True)
         new_values_linear = clf1.transform(values)
         linear = LinearSVC(max_iter=constant.MAXITER)
@@ -607,10 +607,10 @@ def calibrar(usuario,sesion,hitname,verresult):
                         'penalty':["l2","l1"],'multi_class':["ovr"],'class_weight':['balanced'],
                         'solver':['liblinear']}]
         if overfit is 1:
-            logistic=GridSearchCV(LogisticRegression().fit(new_values_logistic,labels),tuned_parameters)
+            logistic=  LogisticRegression().fit(new_values_logistic,labels)
             scores = cross_validate(logistic, new_values_logistic, labels, scoring=scoring, cv=10, return_train_score=False)
         else:
-            logistic=GridSearchCV(LogisticRegression().fit(reshapecasero(values),labels),tuned_parameters)
+            logistic=LogisticRegression().fit(reshapecasero(values),labels)
             scores = cross_validate(
                 logistic, reshapecasero(values), labels, scoring=scoring, cv=10, return_train_score=False)
        
@@ -671,7 +671,15 @@ def calibrar(usuario,sesion,hitname,verresult):
         i = 0
         k = []
         values = auxvect[0:int(len(auxvect)/2)]
-        knn = KNeighborsClassifier(n_neighbors=3).fit(values,labels)
+
+        tuned_parameters=dict(n_neighbors=[2,3],
+                        weights=["uniform","distance"],algorithm=["auto","ball_tree","kd_tree","brute"],
+                        leaf_size=[25,28,30,32,35])
+        
+        if overfit is 1:
+            knn = RandomizedSearchCV(KNeighborsClassifier().fit(values,labels),dict(tuned_parameters), random_state=0)
+        else:
+            knn = KNeighborsClassifier().fit(values,labels)
         scores = cross_validate(knn,reshapecasero(values), labels, scoring=scoring, cv=10, return_train_score=False)
 
         if verresult is True:
