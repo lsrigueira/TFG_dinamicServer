@@ -550,7 +550,9 @@ def calibrar(usuario,sesion,hitname,verresult):
             values[i]=FinalValues
             i+=1
 
-
+    print("Tamaños")
+    print(len(values))
+    print(len(values[0]))
     scoring = ['precision_macro', 'recall_macro', 'precision_micro', 'recall_micro', "f1_micro", "f1_macro", "accuracy"]
     clf1="null"
     if int(resposta) is 1:
@@ -665,7 +667,7 @@ def calibrar(usuario,sesion,hitname,verresult):
         else:
             print("Estaba na base de datos")
             usuario.mydb.updateClf(hitname, "RandomForest", "nada",overFitBool,
-                            randomForest, clf3, new_values_linear, labels)
+                            randomForest, clf3, new_values_forest, labels)
     else:
         print("KNN")
         i = 0
