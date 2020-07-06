@@ -84,7 +84,8 @@ while resposta!=0:
     resposta = user1.esperar("menu")
 
     if int(resposta) is constants.Train_Algorithm:
-        abreviatura=user1.seleccion_golpe()
+        user1.enviar("ok")
+        abreviatura=user1.eleccion(function.mostrar_golpes(),len(constant.GOLPES),False)
         if abreviatura not in GolpesClasificados:
             GolpesClasificados.append(abreviatura)
         interaccion = 0
@@ -92,8 +93,16 @@ while resposta!=0:
         tempos=[[]]
         calidade=[]
         repetir = True 
+        print(abreviatura)
+        print(abreviatura)
+        print(abreviatura)
+        if int(abreviatura) is 1:
+            user1.enviar("etiquetar-crochet")
+        else:
+            user1.enviar("etiquetar-patada")    
         while repetir:
             #Controlador.main()
+            
             auxy=function.readJSONS()
             FinalValues=auxy[1]
             FinalTimes=auxy[0]
@@ -104,6 +113,7 @@ while resposta!=0:
                 forza.append(FinalValues)
                 tempos.append(FinalTimes)
             valido=user1.eleccion(function.mostrar_direccions(),len(constant.DIRECCIONS),False)
+            
             calidade.append(constant.DIRECCIONS[int(valido)-1])
             valido=user1.eleccion("Desexa seguir clasificando?\n\t1)Si\n\t2)No",2,False)
             if int(valido) is 2:
