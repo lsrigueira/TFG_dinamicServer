@@ -584,7 +584,7 @@ def calibrar(usuario,sesion,hitname,verresult):
             print("precision_micro"+ str(sum(scores["test_precision_micro"]) / 10)+" Importante se as mostras non estan balanceadas")
             print("Accuracy: " + str(sum(scores["test_accuracy"]) / 10))
             if usuario.remoto:
-                usuario.enviar(str(sum(scores["fit_time"]) / 10)+","+str(sum(scores["score_time"]) / 10)+","+str(sum(scores["test_accuracy"]) / 10))
+                usuario.enviar(str(sum(scores["fit_time"]) *100)[0:3]+"ms,"+str(sum(scores["score_time"]) * 100)[0:3]+"ms,"+str(sum(scores["test_accuracy"]) *10)[0:4]+"%")
 
         if(not usuario.mydb.contains(hitname,"LinearSVC","nada",overFitBool)):
             print("Non estaba na base de datos")
