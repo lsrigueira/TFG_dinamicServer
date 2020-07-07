@@ -583,6 +583,8 @@ def calibrar(usuario,sesion,hitname,verresult):
             print("Score time " + str(sum(scores["score_time"]) / 10))
             print("precision_micro"+ str(sum(scores["test_precision_micro"]) / 10)+" Importante se as mostras non estan balanceadas")
             print("Accuracy: " + str(sum(scores["test_accuracy"]) / 10))
+            if usuario.remoto:
+                usuario.enviar(str(sum(scores["fit_time"]) / 10)+","+str(sum(scores["score_time"]) / 10)+","+str(sum(scores["test_accuracy"]) / 10))
 
         if(not usuario.mydb.contains(hitname,"LinearSVC","nada",overFitBool)):
             print("Non estaba na base de datos")
@@ -624,6 +626,8 @@ def calibrar(usuario,sesion,hitname,verresult):
             print("precision_micro"+ str(sum(scores["test_precision_micro"]) / 10)+" Importante se as mostras non estan balanceadas")
             print("Accuracy: " + str(sum(scores["test_accuracy"]) / 10))
             print("----------------------------------------------------------------")
+            if usuario.remoto:
+                usuario.enviar(str(sum(scores["fit_time"]) / 10)+","+str(sum(scores["score_time"]) / 10)+","+str(sum(scores["test_accuracy"]) / 10))
 
         if(not usuario.mydb.contains(hitname,"Logistic",usuario.filtro,overFitBool)):
             print("Non estaba na base de datos")
@@ -633,7 +637,7 @@ def calibrar(usuario,sesion,hitname,verresult):
             print("Estaba na base de datos")
             usuario.mydb.updateClf(hitname, "Logistic", usuario.filtro,overFitBool,
                             logistic, clf2, new_values_logistic, labels)
-
+        
     elif int(resposta) is 3:
         i=0
         k=[]
@@ -660,6 +664,9 @@ def calibrar(usuario,sesion,hitname,verresult):
             print("precision_micro"+ str(sum(scores["test_precision_micro"]) / 10)+" Importante se as mostras non estan balanceadas")
             print("Accuracy: " + str(sum(scores["test_accuracy"]) / 10))
             print("----------------------------------------------------------------")
+            if usuario.remoto:
+                usuario.enviar(str(sum(scores["fit_time"]) / 10)+","+str(sum(scores["score_time"]) / 10)+","+str(sum(scores["test_accuracy"]) / 10))
+        
         if(not usuario.mydb.contains(hitname,"RandomForest","nada",overFitBool)):
             print("Non estaba na base de datos")
             print(usuario.mydb.clasificadores)
@@ -692,6 +699,9 @@ def calibrar(usuario,sesion,hitname,verresult):
             print("precision_micro"+ str(sum(scores["test_precision_micro"]) / 10)+" Importante se as mostras non estan balanceadas")
             print("Accuracy: " + str(sum(scores["test_accuracy"]) / 10))
             print("----------------------------------------------------------------")
+            if usuario.remoto:
+                usuario.enviar(str(sum(scores["fit_time"]) / 10)+","+str(sum(scores["score_time"]) / 10)+","+str(sum(scores["test_accuracy"]) / 10))
+
 
         if(not usuario.mydb.contains(hitname,"KNN","nada",overFitBool)):
             print("Non estaba na base de datos")

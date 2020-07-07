@@ -93,9 +93,6 @@ while resposta!=0:
         tempos=[[]]
         calidade=[]
         repetir = True 
-        print(abreviatura)
-        print(abreviatura)
-        print(abreviatura)
         if int(abreviatura) is 1:
             user1.enviar("etiquetar-crochet")
         else:
@@ -189,6 +186,7 @@ while resposta!=0:
         function.getexcel(user1.name + ".json")
 
     elif int(resposta) is constants.Calibrate:
+        user1.enviar("ok")
         index_golpe = False#One index to get the hit from GolpesClasificados(abrev already)
         while index_golpe is False:#index_golpe
             index_golpe=user1.elexir_golpes_clasificados(GolpesClasificados,"Todos")#This function return False if an invalid number has been chosen
@@ -196,6 +194,7 @@ while resposta!=0:
             continue#Its a "break" for the "elif"
         #NOTA,SE PULSAN 0 HAI QUE CALIBRAR TODOS FALTAN POR IMPLEMENTAR ESAS COUSAS
         hitname=GolpesClasificados[int(index_golpe)-1]#to get the real hit name,(funcion menu starts at 1)
+        user1.enviar("Clasificadores")   
         aux=function.calibrar(user1,user1.name,hitname,True)
         clf=aux[0]
         sel_atrib=aux[1]
