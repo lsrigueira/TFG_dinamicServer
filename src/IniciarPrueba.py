@@ -112,7 +112,7 @@ while resposta!=0:
             valido=user1.eleccion(function.mostrar_direccions(),len(constant.DIRECCIONS),False)
             
             calidade.append(constant.DIRECCIONS[int(valido)-1])
-            valido=user1.eleccion("Desexa seguir clasificando?\n\t1)Si\n\t2)No",2,False)
+            valido=user1.eleccion("Desex    a seguir clasificando?\n\t1)Si\n\t2)No",2,False)
             if int(valido) is 2:
                 repetir = False
             interaccion=interaccion+1
@@ -137,33 +137,43 @@ while resposta!=0:
            forza=function.readJSONS()[1]
            if (not user1.mydb.contains(hitname) or user1.remoto): 
                user1.enviar("clasificadores")   
-               aux=function.calibrar(user1,user1.name,hitname,False)
+               aux=function.calibrar(user1,user1.name,hitname,False,False)
            clasificador=user1.mydb.getclf(hitname)
            print(clasificador.clf)
-           clf_real=clasificador.clf
+           clf_real = clasificador.clf
            sel_atrib = clasificador.sel_atrib
-           auxyy=[[]]
-           auxyy[0]=forza
-           forza=auxyy
-           pot=function.potencia(forza[0]) #We have to do it now,with the 135 values
+           auxyy = [[]]
+           auxyy[0] = forza
+           forza = auxyy
+           pot = function.potencia(forza[0]) #We have to do it now,with the 135 values
            if "Linear" in str(clf_real):
-                print (clasificador.overfitting)
                 if not clasificador.overfitting:
-                    forza=sel_atrib.transform(forza)
-                    forza=function.reshapecasero(forza)
-           else:
+                    forza = sel_atrib.transform(forza)
+                    forza = function.reshapecasero(forza)
+            
+           elif clasificador.overfitting:
+               print("VAMOS ATRANSFORMAR ESTO")
                forza = sel_atrib.transform(forza)
-               forza= function.reshapecasero(forza)
+               forza = function.reshapecasero(forza)
 
            print(len(forza[0]))
-           etiqueta=function.getresultado(forza[0],clf_real)[2:-2] #[2:-2]is jsut to deletede "['" and "']" to print
+           try:
+                etiqueta = function.getresultado(forza[0],clf_real)[2:-2] #[2:-2]is jsut to deletede "['" and "']" to print
+           except:
+                print("Exception,using another algorithm")
+                aux=function.calibrar(user1,user1.name,hitname,False,True)
+                clf_real = aux[0]
+                sel_atrib = aux[1]
+                forza = sel_atrib.transform(forza)
+                forza = function.reshapecasero(forza)
+                etiqueta = function.getresultado(forza[0],clf_real)[2:-2]
 
-           vectorhitname=function.ultimosgolpes(user1.name,hitname)
-           vectoretiqueta=function.ultimosgolpes(user1.name,hitname,etiqueta)
-           historialhitname=function.leerhistorial(hitname[:-4]) #Hitname e nombre_clf,no historial solo gardamos o nome
-           historialetiqueta=function.leerhistorial(hitname[:-4],etiqueta)
-           mediahitname=function.mediapot(vectorhitname,historialhitname)
-           mediaetiqueta=function.mediapot(vectoretiqueta,historialetiqueta)
+           vectorhitname = function.ultimosgolpes(user1.name,hitname)
+           vectoretiqueta = function.ultimosgolpes(user1.name,hitname,etiqueta)
+           historialhitname = function.leerhistorial(hitname[:-4]) #Hitname e nombre_clf,no historial solo gardamos o nome
+           historialetiqueta = function.leerhistorial(hitname[:-4],etiqueta)
+           mediahitname = function.mediapot(vectorhitname,historialhitname)
+           mediaetiqueta = function.mediapot(vectoretiqueta,historialetiqueta)
            print("\n-------------------------Resultados-------------------------")
            potenciagolpe = str(100*pot/mediahitname)
            potenciagolpetag = str(100*pot/mediaetiqueta)
@@ -171,14 +181,29 @@ while resposta!=0:
            print("\t"+potenciagolpe+"% de "+str(hitname[:-4]))
            print("\t"+potenciagolpetag+"% de "+str(hitname[:-4])+" "+str(etiqueta))
            user1.enviar(str(pot)+","+potenciagolpe[:6]+"%,"+potenciagolpetag[:6]+"%,"+str(etiqueta))
-           valido=user1.eleccion("Desexa seguir clasificando?\n\t1)Si\n\t2)No",2,False)
+           valido = user1.eleccion("Desexa seguir clasificando?\n\t1)Si\n\t2)No",2,False)
            if int(valido) is 2:
-              repetir=False
+              repetir = False
            function.escribirJSON(str(time.gmtime(time.time())[3]+2)+"-"+str(time.gmtime(time.time())[4]),"historial",string="Nombre:"+hitname[:-4]+"\n\t\t\tPotencia:"+str(pot)+"\n\t\t\tCalificacion:\""+str(etiqueta)+"\"")
 
     elif int(resposta) is constants.History:
         #Ensenhamos el historial de golpes del runtime
-        function.verhistorial()
+        user1.enviar("ok")
+        alldata = function.verhistorial()
+        print(alldata)
+        justNow = ( "18:16,Cro,53451.89279,Derecha,;"
+                    "18:16,Pat,33721.32414,Izquierda,;"
+                    "18:17,Cro,61592.19533,Izquierda,;"
+                    "18:17,Pat,46724.38465,Derecha,;"
+                    "18:17,Cro,72363.24735,Derecha,;"
+                    "18:17,Pat,34612.36728,Izquierda,;"
+                    "18:17,Cro,33277.98598,Izquierda,;"
+                    "18:18,Pat,24515.26958,Derecha,;"
+                    "18:18,Cro,32523.26898,Derecha,;"
+                    "18:18,Pat,45673.25842,Izquierda,;"
+                    "18:18,Cro,29703.12352,Izquierda,;")
+        
+        user1.enviar(justNow)
 
     elif int(resposta) is constants.Data_Csv:
         #Se crean <nombreusuario>_<nombregolpe>.xlsx en el path indicado
@@ -195,7 +220,7 @@ while resposta!=0:
         #NOTA,SE PULSAN 0 HAI QUE CALIBRAR TODOS FALTAN POR IMPLEMENTAR ESAS COUSAS
         hitname=GolpesClasificados[int(index_golpe)-1]#to get the real hit name,(funcion menu starts at 1)
         user1.enviar("Clasificadores")   
-        aux=function.calibrar(user1,user1.name,hitname,True)
+        aux=function.calibrar(user1,user1.name,hitname,True,False)
         clf=aux[0]
         sel_atrib=aux[1]
 

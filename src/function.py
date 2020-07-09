@@ -105,6 +105,7 @@ def verhistorial():
          indexfin=0
          vacio = True
          indexini=contido.find("{",indexfin)
+         tosend = ""
          while contido.find("Value",indexini) is not -1:
             if vacio is True:#that means we are in the first interaction
                 print("Hora\t\tNombre\t\tPotencia\tEtiqueta")
@@ -117,6 +118,14 @@ def verhistorial():
             imprimir=aux+contido[int(indexini)+5:int(indexfin)]
             imprimir=imprimir.replace("\t\t","\t").replace("\n","").replace("\"","").replace("Potencia:","").replace("Calificacion:","").replace("Nombre:","").replace("-",":")
             print(imprimir)
+            temp = imprimir.replace("\t\t","\t").split("\t")
+            temp = temp[0:len(temp)-1]
+            for x in temp:
+                tosend = tosend + x + ","
+            tosend = tosend +";"
+         return tosend   
+
+
          if vacio is True:
             print("Non hai rexistro de ningun golpe para clasificar na sesion")
      except Exception as e:
@@ -501,19 +510,20 @@ def string2float2D(vector):
 
 
 #AQUI MAIS FUNCIONS DE CALIBRAR PORQUE QUEREMOS CHEGAR o 90%
-def calibrar(usuario,sesion,hitname,verresult):
+def calibrar(usuario,sesion,hitname,verresult,recover):
     warnings.filterwarnings('always')
     """
     Aqui ainda hai que tocar moito, non pode ser que este no mesmo lado os dous clasificadores
     """
-    resposta = int(usuario.eleccion("Elixa un clasificador dos que se ensinaron por pantalla\n\t\t1)LinearSVC + SelectFromModel\n\t\t2)LogisticRegression + Grid Search\n\t\t3)RandomForest\n\t\t4)KNN", 5, False))
-    
-    overfit=int(usuario.eleccion("Desexa eliminar o overfitting(recomendable)?\n\t\t1)Sin overfitting\n\t\t2)Con overfitting",2,False))
-    overFitBool = False
-    if(overfit == 1):
+    #Esto con recover devolve un linearSVC sin overfitting
+    if recover is False:
+        resposta = int(usuario.eleccion("Elixa un clasificador dos que se ensinaron por pantalla\n\t\t1)LinearSVC + SelectFromModel\n\t\t2)LogisticRegression + Grid Search\n\t\t3)RandomForest\n\t\t4)KNN", 5, False))
+        overfit=int(usuario.eleccion("Desexa eliminar o overfitting(recomendable)?\n\t\t1)Sin overfitting\n\t\t2)Con overfitting",2,False))
         overFitBool = False
-    else:
-        overFitBool = True
+        if(overfit == 1):
+            overFitBool = False
+        else:
+            overFitBool = True
         
     warnings.filterwarnings("ignore", category=DeprecationWarning)
     if sesion is False:
@@ -555,7 +565,7 @@ def calibrar(usuario,sesion,hitname,verresult):
     print(len(values[0]))
     scoring = ['precision_macro', 'recall_macro', 'precision_micro', 'recall_micro', "f1_micro", "f1_macro", "accuracy"]
     clf1="null"
-    if int(resposta) is 1:
+    if recover is True or int(resposta) is 1:
         #len(values)=60 porque temos 60 golpes almacenados  
         #We will get now a list of randomindex to prove each tolerance(20% of samples)  
         linear = LinearSVC(penalty="l2",max_iter=constant.MAXITER)
@@ -566,7 +576,7 @@ def calibrar(usuario,sesion,hitname,verresult):
         
         #Calculamos os valores sin overfitting tamen e en funcion da eleccion ensinamos un/outro
         
-        if overfit is 1:
+        if recover is True or overfit is 1:
             realvalues = new_values_linear
             linear.fit(new_values_linear, labels)
             scores = cross_validate(linear, new_values_linear, labels, scoring=scoring, cv=10, return_train_score=False)
@@ -585,7 +595,9 @@ def calibrar(usuario,sesion,hitname,verresult):
             print("Accuracy: " + str(sum(scores["test_accuracy"]) / 10))
             if usuario.remoto:
                 usuario.enviar(str(sum(scores["fit_time"]) *100)[0:3]+"ms,"+str(sum(scores["score_time"]) * 100)[0:3]+"ms,"+str(sum(scores["test_accuracy"]) *10)[0:4]+"%")
-
+        if recover is True:
+            linear.fit(new_values_linear, labels)
+            return [linear, clf1]
         if(not usuario.mydb.contains(hitname,"LinearSVC","nada",overFitBool)):
             print("Non estaba na base de datos")
             print(usuario.mydb.clasificadores)
