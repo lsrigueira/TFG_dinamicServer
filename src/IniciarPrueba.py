@@ -180,7 +180,15 @@ while resposta!=0:
            print("O golpe con potencia "+str(pot)+" foi "+str(etiqueta))
            print("\t"+potenciagolpe+"% de "+str(hitname[:-4]))
            print("\t"+potenciagolpetag+"% de "+str(hitname[:-4])+" "+str(etiqueta))
-           user1.enviar(str(pot)+","+potenciagolpe[:6]+"%,"+potenciagolpetag[:6]+"%,"+str(etiqueta))
+           index_enviar_golpe = potenciagolpe.find(".")
+           if index_enviar_golpe is -1:
+               index_enviar_golpe = 6
+           index_enviar_tag = potenciagolpe.find(".")
+           if index_enviar_tag is -1:
+               index_enviar_tag = 6       
+
+           print(str(round(pot))+","+potenciagolpe[:index_enviar_golpe]+"%,"+potenciagolpetag[:index_enviar_tag]+"%,"+str(etiqueta))
+           user1.enviar(str(round(pot))+","+potenciagolpe[:index_enviar_golpe]+"%,"+potenciagolpetag[:index_enviar_tag]+"%,"+str(etiqueta))
            valido = user1.eleccion("Desexa seguir clasificando?\n\t1)Si\n\t2)No",2,False)
            if int(valido) is 2:
               repetir = False

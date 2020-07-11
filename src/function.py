@@ -593,6 +593,8 @@ def calibrar(usuario,sesion,hitname,verresult,recover):
             print("Score time " + str(sum(scores["score_time"]) / 10))
             print("precision_micro"+ str(sum(scores["test_precision_micro"]) / 10)+" Importante se as mostras non estan balanceadas")
             print("Accuracy: " + str(sum(scores["test_accuracy"]) / 10))
+            
+            print(str(sum(scores["fit_time"]) *100)[0:3]+"ms,"+str(sum(scores["score_time"]) * 100)[0:3]+"ms,"+str(sum(scores["test_accuracy"]) *10)[0:4]+"%")
             if usuario.remoto:
                 usuario.enviar(str(sum(scores["fit_time"]) *100)[0:3]+"ms,"+str(sum(scores["score_time"]) * 100)[0:3]+"ms,"+str(sum(scores["test_accuracy"]) *10)[0:4]+"%")
         if recover is True:
@@ -638,6 +640,8 @@ def calibrar(usuario,sesion,hitname,verresult,recover):
             print("precision_micro"+ str(sum(scores["test_precision_micro"]) / 10)+" Importante se as mostras non estan balanceadas")
             print("Accuracy: " + str(sum(scores["test_accuracy"]) / 10))
             print("----------------------------------------------------------------")
+            
+            print(str(sum(scores["fit_time"]) *100)[0:3]+"ms,"+str(sum(scores["score_time"]) * 100)[0:3]+"ms,"+str(sum(scores["test_accuracy"]) *10)[0:4]+"%")
             if usuario.remoto:
                 usuario.enviar(str(sum(scores["fit_time"]) / 10)+","+str(sum(scores["score_time"]) / 10)+","+str(sum(scores["test_accuracy"]) / 10))
 
@@ -676,6 +680,8 @@ def calibrar(usuario,sesion,hitname,verresult,recover):
             print("precision_micro"+ str(sum(scores["test_precision_micro"]) / 10)+" Importante se as mostras non estan balanceadas")
             print("Accuracy: " + str(sum(scores["test_accuracy"]) / 10))
             print("----------------------------------------------------------------")
+            
+            print(str(sum(scores["fit_time"]) *100)[0:3]+"ms,"+str(sum(scores["score_time"]) * 100)[0:3]+"ms,"+str(sum(scores["test_accuracy"]) *10)[0:4]+"%")            
             if usuario.remoto:
                 usuario.enviar(str(sum(scores["fit_time"]) / 10)+","+str(sum(scores["score_time"]) / 10)+","+str(sum(scores["test_accuracy"]) / 10))
         
@@ -711,6 +717,8 @@ def calibrar(usuario,sesion,hitname,verresult,recover):
             print("precision_micro"+ str(sum(scores["test_precision_micro"]) / 10)+" Importante se as mostras non estan balanceadas")
             print("Accuracy: " + str(sum(scores["test_accuracy"]) / 10))
             print("----------------------------------------------------------------")
+            
+            print(str(sum(scores["fit_time"]) *100)[0:3]+"ms,"+str(sum(scores["score_time"]) * 100)[0:3]+"ms,"+str(sum(scores["test_accuracy"]) *10)[0:4]+"%")            
             if usuario.remoto:
                 usuario.enviar(str(sum(scores["fit_time"]) / 10)+","+str(sum(scores["score_time"]) / 10)+","+str(sum(scores["test_accuracy"]) / 10))
 
