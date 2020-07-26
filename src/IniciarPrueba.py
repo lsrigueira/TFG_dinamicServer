@@ -4,8 +4,9 @@
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_predict
 from sklearn.feature_selection import SelectFromModel
-
+from requests import get
 import time
+import socket
 aux=time.time()
 
 import numpy as np
@@ -14,43 +15,35 @@ from collections import namedtuple
 #import Controlar
 import os
 import xlsxwriter
+import requests
 
 import function
 import constant
 import usuario
 from usuario import usuario
 #############################################################PROGRAMA PRINCIPAL#############################################################
+url = 'http://192.168.0.5:8000'
+mac = 1130
+
 Time=[]
 Value=[]
 GolpesClasificados=[]
 resposta=123123
 hits_database=[[]]
 
-#eeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-#eeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-#eeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-#eeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-#eeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-#eeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-#eeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-#O mellor para o boton de "home" vai ser poñer un número a parte e non enseñar e listo
-
-
-"""
-1)Creamos un programilla nunha raspi e puenteamos con duckgo a Ip do noso router externo a un dns
-2)AutoSSH que lle dea a IP privada o noso server de duckDNS
-3)A nosa app conectase e o server devolvelle a privada.Teñen que estar na mesma subrede asíque 
-sabe quen é pola IP externa do router
-"""
-
 remoto = False
 if(int(input("\nDesexa executar o programa en remoto ou local(Defecto)\n\r1)Remoto\n\r2)Local")) == 1):
     remoto = True
+    ippublica = get('https://api.ipify.org').text
+    ipprivada = [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
+    myargs= {"MAC" : mac, "IPPrivada" : ipprivada, "IPPublica" : ippublica}
+    requests.post(url,myargs)
+    print("Enviados os datos")
+
 
 user1 = usuario(remoto)
 Constants = namedtuple('Constants', ['Back', 'Train_Algorithm', 'Train_Me','History','Data_Csv','Calibrate','Show_Vector','Configuration'])
 constants = Constants(0, 1, 2, 3, 4, 5, 6, 7)
-
 aux=time.time()-aux
 
 #Inicializa todos los archivos(para permitirnos hacer un append) y pide un inicio de sesion

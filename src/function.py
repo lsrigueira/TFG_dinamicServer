@@ -78,7 +78,7 @@ def menu(sesion):
         try:
             resposta=int(input("\nQue desexa facer?\n\t1)Modo entrenamento\n\t2)Modo practica\n\t3)Ver historial da sesion"
                                "\n\t4)Sacar Excel da base de datos\n\t5)Iniciar Sesion\n\t6)Pintar vectores"
-                               "\n\t7)Configuracion de usuario\n\t8)Probar cousas random \n\t0)Sair"))
+                               "\n\t7)Configuracion de usuario\n\t0)Sair"))
             if resposta is 5:
                 resposta = 15
         except:
@@ -87,7 +87,7 @@ def menu(sesion):
         try:
             resposta=int(input("\nQue desexa facer?\n\t1)Modo entrenamento\n\t2)Modo practica\n\t3)Ver historial da sesion"
                                "\n\t4)Sacar Excel da base de datos\n\t5)Probar Clasificadores\n\t6)Pintar vectores"
-                               "\n\t7)Configuracion de usuario\n\t8)Probar cousas random \n\t0)Sair"))
+                               "\n\t7)Configuracion de usuario\n\t0)Sair"))
         except:
             resposta=int(31239)
     return resposta
